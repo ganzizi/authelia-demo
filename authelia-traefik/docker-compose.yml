@@ -13,7 +13,7 @@ services:
     image: authelia/authelia
     container_name: authelia
     volumes:
-      - ${PWD}/config/authelia:/config
+      - ./config/authelia:/config
     networks:
       - net
     labels:
@@ -38,7 +38,7 @@ services:
     image: redis:alpine
     container_name: redis
     volumes:
-      - ${PWD}/data/redis:/data
+      - ./data/redis:/data
     networks:
       - net
     expose:
@@ -51,7 +51,7 @@ services:
     image: traefik:v2.9.6
     container_name: traefik
     volumes:
-      - ${PWD}/data/traefik:/etc/traefik
+      - ./data/traefik:/etc/traefik
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net

@@ -20,9 +20,9 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - ${PWD}/config/nginx/snippets:/config/nginx/snippets
-      - ${PWD}/config/nginx/site-confs:/config/nginx/site-confs
-      - ${PWD}/config/nginx/keys:/config/nginx/keys
+      - ./config/nginx/snippets:/config/nginx/snippets
+      - ./config/nginx/site-confs:/config/nginx/site-confs
+      - ./config/nginx/keys:/config/nginx/keys
     environment:
       TZ: 'Asia/Shanghai'
       DOCKER_MODS: 'linuxserver/mods:nginx-proxy-confs'
@@ -37,7 +37,7 @@ services:
     expose:
       - 9091
     volumes:
-      - ${PWD}/config/authelia:/config
+      - ./config/authelia:/config
     environment:
       TZ: 'Asia/Shanghai'
 
@@ -45,7 +45,7 @@ services:
     image: redis:alpine
     container_name: redis
     volumes:
-      - ${PWD}/data/redis:/data
+      - ./data/redis:/data
     networks:
       net:
         aliases: []
@@ -59,7 +59,7 @@ services:
     image: traefik:v2.9.6
     container_name: traefik
     volumes:
-      - ${PWD}/data/traefik:/etc/traefik
+      - ./data/traefik:/etc/traefik
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       net:
@@ -71,18 +71,6 @@ services:
     command:
       - '--api.insecure=true'
       - '--providers.docker=true'
-    #   - '--providers.docker.exposedByDefault=false'
-    #   - '--entrypoints.http=true'
-    #   - '--entrypoints.http.address=:80'
-    #   - '--entrypoints.http.http.redirections.entrypoint.to=https'
-    #   - '--entrypoints.http.http.redirections.entrypoint.scheme=https'
-    #   - '--entrypoints.https=true'
-    #   - '--entrypoints.https.address=:443'
-    #   - '--certificatesResolvers.letsencrypt.acme.email=your-email@your-domain.com'
-    #   - '--certificatesResolvers.letsencrypt.acme.storage=/etc/traefik/acme.json'
-    #   - '--certificatesResolvers.letsencrypt.acme.httpChallenge.entryPoint=http'
-    #   - '--log=true'
-    #   - '--log.level=DEBUG'
 
   secure:
     container_name: secure
