@@ -1,0 +1,16 @@
+._*
+.env
+.idea
+.vscode
+.vagrant
+.DS_Store
+.phpunit.result.cache
+/authelia-nginx/data/*
+/authelia-nginx/config/authelia/db.sqlite3
+/authelia-nginx/config/authelia/notification.txt
+/authelia-traefik/data/*
+/authelia-traefik/config/authelia/db.sqlite3
+/authelia-traefik/config/authelia/notification.txt
+/authelia-npm/data/*
+/authelia-npm/config/authelia/db.sqlite3
+/authelia-npm/config/authelia/notification.txt

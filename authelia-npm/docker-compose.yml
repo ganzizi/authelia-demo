@@ -1,0 +1,98 @@
+version: '3.3'
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.99.99.0/24
+          gateway: 10.99.99.1
+
+services:
+  #admin@example.com changeme
+  nginx:
+    container_name: nginx
+    image: jc21/nginx-proxy-manager
+    restart: unless-stopped
+    networks:
+      net:
+        aliases: []
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ${PWD}/data/nginx-proxy-manager/data:/data
+      - ${PWD}/data/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    environment:
+      TZ: 'Asia/Shanghai'
+
+  authelia:
+    container_name: authelia
+    image: authelia/authelia
+    restart: unless-stopped
+    networks:
+      net:
+        aliases: []
+    expose:
+      - 9091
+    volumes:
+      - ${PWD}/config/authelia:/config
+    environment:
+      TZ: 'Asia/Shanghai'
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - ${PWD}/data/redis:/data
+    networks:
+      net:
+        aliases: []
+    expose:
+      - 6379
+    restart: unless-stopped
+    environment:
+      - Asia/Shanghai
+
+  traefik:
+    image: traefik:v2.9.6
+    container_name: traefik
+    volumes:
+      - ${PWD}/data/traefik:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      net:
+        aliases: []
+    ports:
+      - 8088:80
+      - 8080:8080
+      - 666:443
+    command:
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+
+  secure:
+    container_name: secure
+    image: docker.io/traefik/whoami
+    restart: unless-stopped
+    networks:
+      net:
+        aliases: []
+    expose:
+      - 80
+    environment:
+      TZ: 'Asia/Shanghai'
+
+  public:
+    container_name: public
+    image: docker.io/traefik/whoami
+    restart: unless-stopped
+    networks:
+      net:
+        aliases: []
+    expose:
+      - 80
+    environment:
+      TZ: 'Asia/Shanghai'
+

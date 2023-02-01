@@ -1,0 +1,94 @@
+###############################################################
+#                   Authelia configuration                    #
+###############################################################
+
+jwt_secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIiOltdLCJpYXQiOjE2Njk3MDU4MjAsImV4cCI6NDEwMjMyOTU5OSwiYXVkIjoiIiwiaXNzIjoiIiwic3ViIjoiIn0.m6l1XlodI_N4Yz9P5p57tbsPuSOmDiFfbTLRKMCrDy8
+default_redirection_url: https://public.example.com
+
+# theme: light # there are 3 themes so choose one you like
+
+server:
+  host: 0.0.0.0
+  port: 9091
+
+log:
+  level: debug
+# This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
+
+totp:
+  issuer: example.com
+
+# duo_api:
+#  hostname: api-123456789.example.com
+#  integration_key: ABCDEF
+#  # This secret can also be set using the env variables AUTHELIA_DUO_API_SECRET_KEY_FILE
+#  secret_key: 1234567890abcdefghifjkl
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+  # ldap:
+  #   implementation: custom
+  #   url: ldap://yourNASIP
+  #   start_tls: false
+  #   base_dn: dc=blackvoid,dc=home # enter the values from the LDAP config
+  #   additional_users_dn: cn=users
+  #   additional_groups_dn: cn=groups
+  #   groups_filter: (&(uniquemember={dn})(objectclass=groupOfUniqueNames))
+  #   user: uid=admin,cn=users,dc=blackvoid,dc=home # your LDAP parameters
+  #   password: xxxxxxxxxxx # LDAP Admin password
+
+access_control:
+  default_policy: deny
+  rules:
+    # Rules applied to everyone
+    - domain: public.example.com
+      policy: bypass
+    - domain: traefik.example.com
+      policy: one_factor
+    - domain: secure.example.com
+      policy: two_factor
+
+session:
+  name: authelia_session
+  # This secret can also be set using the env variables AUTHELIA_SESSION_SECRET_FILE
+  secret: 481F2EN0L2RQJHT882OSM
+  same_site: lax
+  expiration: 3600  # 1 hour
+  inactivity: 300  # 5 minutes
+  domain: example.com  # Should match whatever your root protected domain is
+
+  redis:
+    host: redis
+    port: 6379
+    # This secret can also be set using the env variables AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+    # password: authelia
+
+regulation:
+  max_retries: 3
+  find_time: 120
+  ban_time: 300
+
+storage:
+  encryption_key: 481F2EN0L2RQJHT882OSM
+  local:
+    path: /config/db.sqlite3
+  # mysql:
+  #   host: yourNASIP
+  #   port: 3306 # mysql docker container port
+  #   database: authelia # change to the name you have configured
+  #   username: authelia_user # change to the user you have configured
+  #   password: xxxxxxxxxxxx # change to the password you have configured
+
+notifier:
+  disable_startup_check: false
+  filesystem:
+    filename: /config/notification.txt
+  # smtp:
+  #   username: usernameOfYourMail
+  #   password: xxxxxx
+  #   host: smtp.gmail.com # this is just an example
+  #   port: 587
+  #   sender: sender@domain.com
+
+

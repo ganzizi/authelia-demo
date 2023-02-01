@@ -1,0 +1,16 @@
+users:
+    admin:
+        password: $argon2id$v=19$m=65536,t=3,p=4$HayAipxBMr2poBhAn4hMMA$ntUKy4Kbqb1ZvzEDR5C3Xc/5etGCu6U+n9mdQtYvrFI
+        displayname: Admin
+        email: admin@admin.com
+        groups:
+            - admins
+        disabled: false
+    authelia:
+        password: $argon2id$v=19$m=65536,t=3,p=4$oAIWBEo8im0T6TAwbb52uQ$k6LHj9Nr6Oep2E+qlHRfYXBMiIfZW+GKDeN1eXtI81k
+        displayname: Authelia User
+        email: zhicheng123@126.com
+        groups:
+            - admins
+            - dev
+        disabled: false
